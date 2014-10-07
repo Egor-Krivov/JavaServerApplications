@@ -11,6 +11,8 @@ import egor.comment.modules.CommentDB;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalTime;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -33,10 +35,20 @@ public class CommentServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)            
             throws ServletException, IOException {
         CommentPage commentPage = new CommentPage();
-        commentPage.addComment("now", "nope");
+        String text = request.getParameter("comment");
+        if (text == null || text.equals("")) {
+            commentPage.addComment(LocalTime.now().toString(), "<strong>No text found</strong>");
+        }
+        else {
+            db.addEntry(text);
+            List<CommentDB.Entry> list = db.getEntryList();
+            for (CommentDB.Entry i : list) {
+                commentPage.addComment(i.getTime(), i.getText());
+            }
+        }
         response.setContentType("text/html;charset=UTF-8");        
-        db.addEntry("Hi");
         try (PrintWriter out = response.getWriter()) {
+            
             out.println(commentPage.getContent());
         }
     }

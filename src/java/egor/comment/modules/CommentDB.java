@@ -21,7 +21,7 @@ import java.util.List;
  * @author egor
  */
 public class CommentDB {
-    static class Entry {
+    static public class Entry {
         private String text;
         private String time;
 
@@ -69,38 +69,35 @@ public class CommentDB {
     }
     
     public List<Entry> getEntryList() {
+        List<Entry> list = new LinkedList<>();
         try {
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM comments");        
-            List<Entry> list = new LinkedList<>();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM comments ORDER BY time");        
+            
             if (resultSet == null) {
                 return list;
             }            
             while (resultSet.next()) {
                 Entry entry = new Entry();
-                entry.setTime(resultSet.getTimestamp("time_of_comment").toString());
-                entry.setText("text");
+                entry.setTime(resultSet.getTimestamp("time").toString());
+                entry.setText(resultSet.getString("comment"));
                 list.add(entry);
-                //TODO fix text adding
-                
             }
             return list;
         }
         catch (SQLException ex) {
             ex.printStackTrace();
-            return null;
+            return list;
         }
     }
   
-    public void addEntry(String text) {         
-        Timestamp time = new Timestamp(new java.util.Date().getTime());  
+    public void addEntry(String text) {
         try {
             Statement s = connection.createStatement(); 
             System.out.println("an entry was added");             
             s.executeUpdate("insert into comments (time, comment) values (now(), '" + text + "')");
         } catch (SQLException ex) {
             ex.printStackTrace();
-        }                
-        //TODO
+        }
     }
 }
