@@ -6,6 +6,8 @@
 package egor.comment.servlet;
 
 import egor.comment.modules.CommentPage;
+import egor.comment.modules.CommentDB;
+
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,12 +15,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 /**
  *
  * @author egor
  */
 public class CommentServlet extends HttpServlet {
+    private final CommentDB db = new CommentDB();
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -32,13 +34,13 @@ public class CommentServlet extends HttpServlet {
             throws ServletException, IOException {
         CommentPage commentPage = new CommentPage();
         commentPage.addComment("now", "nope");
-        response.setContentType("text/html;charset=UTF-8");
-        
+        response.setContentType("text/html;charset=UTF-8");        
+        db.addEntry("Hi");
         try (PrintWriter out = response.getWriter()) {
             out.println(commentPage.getContent());
         }
     }
-
+    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
