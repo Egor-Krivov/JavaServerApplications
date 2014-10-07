@@ -4,9 +4,17 @@
         <servlet-name>TimeServlet</servlet-name>
         <servlet-class>server.commentServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CommentServlet</servlet-name>
+        <servlet-class>egor.comment.servlet.CommentServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>TimeServlet</servlet-name>
         <url-pattern>/TimeServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CommentServlet</servlet-name>
+        <url-pattern>/CommentServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
