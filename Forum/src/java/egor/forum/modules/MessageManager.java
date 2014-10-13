@@ -75,6 +75,21 @@ public class MessageManager {
             "INSERT INTO " + TABLE_NAME + " (" + TEXT_COLUMN_NAME + ", " + AUTHOR_COLUMN_NAME + ", " + DATE_COLUMN_NAME + ", " + 
                          PARENT_ID_COLUMN_NAME + ") VALUES (?, ?, ?, ?)";
     
+    public boolean deleteMessage(int id) {
+        Connection connection = ConnectionManager.getConnection();
+        if (connection == null) {
+            logger.log(Level.SEVERE, "Couln't establish a connection to database");
+            return false;
+        }        
+        try {
+            PreparedStatement ps = connection.prepareStatement(DELETE_MESSAGE_BY_ID_QUERY);
+            ps.setInt(1, id);           
+            return ps.execute();            
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
     public boolean addMessage(String text, String author, int parentId) {
         Connection connection = ConnectionManager.getConnection();
         if (connection == null) {

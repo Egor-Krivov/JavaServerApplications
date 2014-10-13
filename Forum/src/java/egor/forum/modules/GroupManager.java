@@ -62,6 +62,30 @@ public class GroupManager {
             "INSERT INTO " + TABLE_NAME + " (" + NAME_COLUMN_NAME + ", " + 
                          PARENT_ID_COLUMN_NAME + ") VALUES (?, ?)";
     
+    public boolean deleteGroup(int groupId) {
+        Connection connection = ConnectionManager.getConnection();
+        if (connection == null) {
+            logger.log(Level.SEVERE, "Couln't establish a connection to database");
+            return false;
+        }
+        TopicManager topicManager = new TopicManager();
+        List<TopicManager.Topic> topicList = topicManager.getAllChildrenTopics(groupId);
+        List<Group> groupList = getAllChildrenGroup(groupId);
+        for (TopicManager.Topic topic : topicList) {
+            topicManager.deleteTopic(topic.getId());
+        }
+        for (Group group : groupList) {
+            deleteGroup(group.getId());
+        }
+        try {
+            PreparedStatement ps = connection.prepareStatement(DELETE_GROUP_BY_ID_QUERY);
+            ps.setInt(1, groupId);
+            return ps.execute();            
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
     /**
      * Tries to add new group. If failes, returns false 
      * @param name

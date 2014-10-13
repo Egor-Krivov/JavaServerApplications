@@ -13,8 +13,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <%
-        TopicManager topicManager = new TopicManager();
-        //Get id of current group
+        TopicManager topicManager = new TopicManager();   
         int topicId = 0;
         TopicManager.Topic currentTopic = null;
         try { 
@@ -39,7 +38,7 @@
                     <a href="group.jsp?id=1">Home</a>
                 </ul>
                 <ul>
-                    <a href="group.jsp?id="<%=currentTopic.getGroupId()%>>Up</a>
+                    <a href="group.jsp?id=<%=currentTopic.getGroupId()%>">Up</a>
                 </ul>
             </li>
         </div>
@@ -55,6 +54,8 @@
                         <%=message.getText()%>
                         <br/>
                         <%=message.getTime().toString()%>
+                        <br/>
+                        <a href="DeleteMessageServlet?id=<%=currentTopic.getId()%>&victim_id=<%=message.getId()%>">delete</a>
                     </ul>
                 <%
                 }

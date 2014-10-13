@@ -41,10 +41,10 @@ try {
         <div class="navigation">
             <li>
                 <ul>
-                    <a href="/Forum/group.jsp?id=1">Home</a>
+                    <a href="group.jsp?id=1">Home</a>
                 </ul>
                 <ul>
-                    <a href="/Forum/group.jsp?id="<%=currentGroup.getParentGroupId()%>>Up</a>
+                    <a href="group.jsp?id=<%=String.valueOf(currentGroup.getParentGroupId())%>">Up</a>
                 </ul>
             </li>
         </div>
@@ -65,6 +65,8 @@ try {
                 for (GroupManager.Group group : groupList) {%>
                     <ul>
                         <a href="group.jsp?id=<%=group.getId()%>"><%=group.getName()%></a>
+                        <br/>
+                        <a href="DeleteGroupServlet?id=<%=currentGroup.getId()%>&victim_id=<%=group.getId()%>">delete</a>
                     </ul>
                 <%
                 }
@@ -88,6 +90,8 @@ try {
                 for (TopicManager.Topic topic : topicList) {%>
                     <ul>
                         <a href="topic.jsp?id=<%=topic.getId()%>"><%=topic.getName()%></a>
+                        <br/>
+                        <a href="DeleteTopicServlet?id=<%=currentGroup.getId()%>&victim_id=<%=topic.getId()%>">delete</a>
                     </ul>
                 <%
                 }

@@ -62,6 +62,26 @@ public class TopicManager {
             "INSERT INTO " + TABLE_NAME + " (" + NAME_COLUMN_NAME + ", " + 
                          PARENT_ID_COLUMN_NAME + ") VALUES (?, ?)";
     
+    public boolean deleteTopic(int id) {
+        Connection connection = ConnectionManager.getConnection();
+        if (connection == null) {
+            logger.log(Level.SEVERE, "Couln't establish a connection to database");
+            return false;
+        }
+        MessageManager messageManager = new MessageManager();
+        List<MessageManager.Message> messageList = messageManager.getAllChildrenMessages(id);        
+        for (MessageManager.Message message : messageList) {
+            messageManager.deleteMessage(message.getId());
+        }
+        try {
+            PreparedStatement ps = connection.prepareStatement(DELETE_TOPIC_BY_ID_QUERY);
+            ps.setInt(1, id);           
+            return ps.execute();            
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
     /**
      * Tries to add new topic. If failes, returns false 
      * @param name
